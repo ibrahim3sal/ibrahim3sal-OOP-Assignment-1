@@ -8,26 +8,10 @@ public class InvoiceBuilder
     private string? _customerEmail;
     private string? _customerPhone;
 
-    private string? _billingStreet;
-    private string? _billingCity;
-    private string? _billingState;
-    private string? _billingZipCode;
-    private string? _billingCountry;
+    private Address? _billingAddress;
+    private Address? _shippingAddress;
 
-    private string? _shippingStreet;
-    private string? _shippingCity;
-    private string? _shippingState;
-    private string? _shippingZipCode;
-    private string? _shippingCountry;
-
-    private DateTime _orderDate;
-    private string? _paymentMethod;
-    private string? _currency;
-
-    private decimal _subTotal;
-    private decimal? _discountAmount;
-    private decimal? _taxAmount;
-    private decimal? _totalAmount;
+    private OrderInfo? _orderInfo;
 
     public InvoiceBuilder SetInvoiceId(int invoiceId)
     {
@@ -53,77 +37,21 @@ public class InvoiceBuilder
         return this;
     }
 
-    public InvoiceBuilder SetBillingAddress(
-        string street,
-        string city,
-        string state,
-        string zipCode,
-        string country)
+    public InvoiceBuilder SetBillingAddress(Address address)
     {
-        _billingStreet = street;
-        _billingCity = city;
-        _billingState = state;
-        _billingZipCode = zipCode;
-        _billingCountry = country;
-
+        _billingAddress = address;
         return this;
     }
 
-    public InvoiceBuilder SetShippingAddress(
-        string street,
-        string city,
-        string state,
-        string zipCode,
-        string country)
+    public InvoiceBuilder SetShippingAddress(Address address)
     {
-        _shippingStreet = street;
-        _shippingCity = city;
-        _shippingState = state;
-        _shippingZipCode = zipCode;
-        _shippingCountry = country;
-
+        _shippingAddress = address;
         return this;
     }
 
-    public InvoiceBuilder SetOrderDate(DateTime orderDate)
+    public InvoiceBuilder SetOrderInfo(OrderInfo orderInfo)
     {
-        _orderDate = orderDate;
-        return this;
-    }
-
-    public InvoiceBuilder SetPaymentMethod(string paymentMethod)
-    {
-        _paymentMethod = paymentMethod;
-        return this;
-    }
-
-    public InvoiceBuilder SetCurrency(string currency)
-    {
-        _currency = currency;
-        return this;
-    }
-
-    public InvoiceBuilder SetSubTotal(decimal subTotal)
-    {
-        _subTotal = subTotal;
-        return this;
-    }
-
-    public InvoiceBuilder SetDiscountAmount(decimal discountAmount)
-    {
-        _discountAmount = discountAmount;
-        return this;
-    }
-
-    public InvoiceBuilder SetTaxAmount(decimal taxAmount)
-    {
-        _taxAmount = taxAmount;
-        return this;
-    }
-
-    public InvoiceBuilder SetTotalAmount(decimal totalAmount)
-    {
-        _totalAmount = totalAmount;
+        _orderInfo = orderInfo;
         return this;
     }
 
@@ -137,39 +65,17 @@ public class InvoiceBuilder
             throw new InvalidOperationException(
                 "Customer email is required.");
 
-        if (string.IsNullOrWhiteSpace(_paymentMethod))
+        if (_orderInfo is null)
             throw new InvalidOperationException(
-                "Payment method is required.");
-
-        if (string.IsNullOrWhiteSpace(_currency))
-            throw new InvalidOperationException(
-                "Currency is required.");
+                "Order information is required.");
 
         return new Invoice(
             _invoiceId,
             _customerName,
             _customerEmail,
             _customerPhone,
-
-            _billingStreet,
-            _billingCity,
-            _billingState,
-            _billingZipCode,
-            _billingCountry,
-
-            _shippingStreet,
-            _shippingCity,
-            _shippingState,
-            _shippingZipCode,
-            _shippingCountry,
-
-            _orderDate,
-            _paymentMethod,
-            _currency,
-
-            _subTotal,
-            _discountAmount,
-            _taxAmount,
-            _totalAmount);
+            _billingAddress,
+            _shippingAddress,
+            _orderInfo);
     }
 }

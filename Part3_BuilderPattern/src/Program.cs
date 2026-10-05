@@ -1,25 +1,22 @@
 ﻿using Part3_BuilderPattern;
 
-var invoice = new InvoiceBuilder()
-    .SetInvoiceId(1)
-    .SetCustomerName("Ibrahim")
-    .SetCustomerEmail("ibrahim@gmail.com")
-    .SetCustomerPhone("01000000000")
+var billingAddress = new AddressBuilder()
+    .SetStreet("Street 1")
+    .SetCity("Zagazig")
+    .SetState("Sharqia")
+    .SetZipCode("44511")
+    .SetCountry("Egypt")
+    .Build();
 
-    .SetBillingAddress(
-        "Street 1",
-        "Zagazig",
-        "Sharqia",
-        "44511",
-        "Egypt")
+var shippingAddress = new AddressBuilder()
+    .SetStreet("Street 2")
+    .SetCity("Cairo")
+    .SetState("Cairo")
+    .SetZipCode("11511")
+    .SetCountry("Egypt")
+    .Build();
 
-    .SetShippingAddress(
-        "Street 2",
-        "Cairo",
-        "Cairo",
-        "11511",
-        "Egypt")
-
+var orderInfo = new OrderBuilder()
     .SetOrderDate(DateTime.Now)
     .SetPaymentMethod("Credit Card")
     .SetCurrency("EGP")
@@ -27,21 +24,22 @@ var invoice = new InvoiceBuilder()
     .SetDiscountAmount(100)
     .SetTaxAmount(50)
     .SetTotalAmount(950)
+    .Build();
 
+var invoice = new InvoiceBuilder()
+    .SetInvoiceId(1)
+    .SetCustomerName("Ibrahim")
+    .SetCustomerEmail("ibrahim@gmail.com")
+    .SetCustomerPhone("01000000000")
+    .SetBillingAddress(billingAddress)
+    .SetShippingAddress(shippingAddress)
+    .SetOrderInfo(orderInfo)
     .Build();
 
 Console.WriteLine($"Invoice ID: {invoice.InvoiceId}");
 Console.WriteLine($"Customer: {invoice.CustomerName}");
 Console.WriteLine($"Email: {invoice.CustomerEmail}");
-
-Console.WriteLine(
-    $"Billing City: {invoice.BillingCity}");
-
-Console.WriteLine(
-    $"Shipping City: {invoice.ShippingCity}");
-
-Console.WriteLine(
-    $"Payment: {invoice.PaymentMethod}");
-
-Console.WriteLine(
-    $"Total: {invoice.TotalAmount}");
+Console.WriteLine($"Billing City: {invoice.BillingAddress?.City}");
+Console.WriteLine($"Shipping City: {invoice.ShippingAddress?.City}");
+Console.WriteLine($"Payment: {invoice.OrderInfo.PaymentMethod}");
+Console.WriteLine($"Total: {invoice.OrderInfo.TotalAmount}");
